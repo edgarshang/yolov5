@@ -31,7 +31,7 @@ import os
 import platform
 import sys
 from pathlib import Path
-
+import time
 import torch
 
 FILE = Path(__file__).resolve()
@@ -77,6 +77,7 @@ def run(
         half=False,  # use FP16 half-precision inference
         dnn=False,  # use OpenCV DNN for ONNX inference
         vid_stride=1,  # video frame-rate stride
+        showCallBack = None,
 ):
     source = str(source)
     save_img = not nosave and not source.endswith('.txt')  # save inference images
@@ -182,6 +183,13 @@ def run(
                 cv2.imshow(str(p), im0)
                 cv2.waitKey(1)  # 1 millisecond
 
+            if showCallBack != None:
+                showCallBack(im0)
+                cv2.waitKey(1)
+                time.sleep(0.02)
+
+
+            
             # Save results (image with detections)
             if save_img:
                 if dataset.mode == 'image':
@@ -257,3 +265,6 @@ def main(opt):
 if __name__ == "__main__":
     opt = parse_opt()
     main(opt)
+
+class yolov5_Handler:
+    pass
